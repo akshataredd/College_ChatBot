@@ -1,0 +1,14 @@
+{
+  "Computer Science": {
+    "semesters": {
+      "1": ["Mathematics I", "Physics", "Introduction to Programming"],
+      "2": ["Mathematics II", "Data Structures", "Digital Logic"],
+      "3": ["Algorithms", "Operating Systems", "Discrete Math"]
+    },
+    "fees": "$4000 per semester"
+  },
+  "Mechanical": {
+    "semesters": {"1": ["Engineering Mechanics", "Chemistry"], "2": ["Thermodynamics"]},
+    "fees": "$3800 per semester"
+  }
+}

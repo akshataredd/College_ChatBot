@@ -1,0 +1,7 @@
+{
+  "upcoming": [
+    {"title": "Freshers' Orientation", "date": "2025-08-15", "location": "Main Auditorium"},
+    {"title": "AI Workshop", "date": "2025-09-05", "location": "Lab 2"}
+  ],
+  "holidays": ["2025-12-25", "2025-01-01"]
+}

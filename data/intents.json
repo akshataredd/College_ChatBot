@@ -1,0 +1,260 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi", "Hello", "Hey", "Good morning", "Good afternoon", "Good evening",
+        "What's up", "Greetings", "Hola", "Namaste", "Hi there"
+      ],
+      "responses": [
+        "Hello! Welcome to our college chatbot. How can I assist you today?",
+        "Hi there! How can I help you with college information?",
+        "Hey! What would you like to know about our college?"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Bye", "Goodbye", "See you later", "Thanks bye", "Exit", "Quit",
+        "Take care", "Catch you later", "Gotta go", "See ya"
+      ],
+      "responses": [
+        "Goodbye! Have a great day!",
+        "See you later! Feel free to come back anytime.",
+        "Thank you for using our chatbot. Goodbye!"
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "Thanks", "Thank you", "Thanks a lot", "I appreciate it", "Thanks for the help",
+        "Appreciate it", "Grateful", "Thankyou", "Thnx", "Thx"
+      ],
+      "responses": [
+        "You're welcome!", "Happy to help!", "Anytime! Feel free to ask more questions."
+      ]
+    },
+    {
+      "tag": "college_timings",
+      "patterns": [
+        "What are the college timings", "When does college open", "College hours",
+        "Opening time", "Closing time", "What time does college start", "College schedule",
+        "What time does college close", "Working hours", "Office hours", "When is college open"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "departments",
+      "patterns": [
+        "What departments do you have", "List of departments", "Available branches",
+        "Which departments are there", "Tell me about departments", "Show me all departments",
+        "How many departments", "What branches are offered", "Engineering branches",
+        "Available streams"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "facilities",
+      "patterns": [
+        "What facilities are available", "College facilities", "Infrastructure",
+        "What does the college have", "Lab facilities", "Library details", "Sports facilities",
+        "Campus facilities", "What amenities", "Canteen", "Cafeteria", "Gym facilities",
+        "Computer lab", "Auditorium", "Medical facilities", "WiFi availability"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "library",
+      "patterns": [
+        "Library timings", "Library hours", "When is library open", "Library facilities",
+        "How many books in library", "Digital library", "E-library", "Library resources",
+        "Can I issue books", "Library membership", "Reading room"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "hostel",
+      "patterns": [
+        "Hostel facilities", "Is hostel available", "Hostel fees", "Hostel accommodation",
+        "Boys hostel", "Girls hostel", "Hostel rooms", "Hostel mess", "Hostel warden",
+        "How to get hostel", "Hostel admission", "Hostel timings", "Hostel rules"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "transport",
+      "patterns": [
+        "Bus facility", "Transport facility", "College bus", "Bus routes",
+        "Bus timings", "How to reach college", "Transport fee", "Bus pass",
+        "Shuttle service", "Is transport available"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "contact",
+      "patterns": [
+        "Contact information", "How to reach you", "Phone number", "Email address",
+        "College address", "Where is the college located", "How can I contact",
+        "Office contact", "Admission office contact", "Helpdesk number"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "courses",
+      "patterns": [
+        "What courses do you offer", "Available courses", "Course details", "Syllabus information",
+        "Subject list", "Which subjects are taught", "Tell me about courses", "Semester subjects",
+        "What subjects in first year", "Course curriculum", "Subjects in computer science",
+        "Mechanical engineering subjects", "Civil subjects", "ECE syllabus"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "admission",
+      "patterns": [
+        "How to apply", "Admission process", "How do I get admission", "Application procedure",
+        "Admission requirements", "When is admission", "How to enroll", "Eligibility criteria",
+        "Admission form", "Last date to apply", "Entrance exam", "Admission test",
+        "Documents required for admission", "How to apply online", "Admission cutoff"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "fees",
+      "patterns": [
+        "What is the fee structure", "Course fees", "How much does it cost", "Tuition fees",
+        "Fee details", "Payment information", "Total fees", "Semester fees", "Annual fees",
+        "How much for engineering", "Fees for computer science", "Payment mode",
+        "Installment options", "Hostel fees"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "scholarship",
+      "patterns": [
+        "Scholarship available", "Financial aid", "Fee concession", "Merit scholarship",
+        "How to get scholarship", "Scholarship criteria", "Government scholarship",
+        "Scholarship for students", "Free education", "Fee waiver", "Educational loan"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "placements",
+      "patterns": [
+        "Placement statistics", "Placement record", "Companies visiting", "Job opportunities",
+        "Highest package", "Average package", "Placement cell", "Campus placement",
+        "Which companies recruit", "Placement training", "Internship opportunities",
+        "Placement percentage", "Career opportunities"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "internship",
+      "patterns": [
+        "Internship program", "Summer internship", "Industrial training", "Internship opportunities",
+        "How to get internship", "Mandatory internship", "Internship in final year",
+        "Company internships", "Internship duration"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "faculty",
+      "patterns": [
+        "Faculty details", "Who are the teachers", "Professor information", "Staff details",
+        "Faculty members", "Teaching staff", "Tell me about faculty", "Qualified teachers",
+        "Faculty qualifications", "HOD details", "Department head"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "principal",
+      "patterns": [
+        "Who is the principal", "Principal details", "Tell me about the principal",
+        "Principal name", "Principal qualifications", "Director", "Head of institution"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "events",
+      "patterns": [
+        "Upcoming events", "College events", "What events are happening", "Any festivals",
+        "Workshops", "Seminars", "Cultural activities", "Holiday list", "Tech fest",
+        "Cultural fest", "Sports day", "Annual day", "Hackathon", "Technical events",
+        "Competitions", "College fest"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "sports",
+      "patterns": [
+        "Sports facilities", "Sports activities", "Games available", "Playground",
+        "Sports equipment", "Outdoor games", "Indoor games", "Sports tournament",
+        "Athletics", "Cricket ground", "Basketball court", "Gym"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "clubs",
+      "patterns": [
+        "Student clubs", "Technical clubs", "Cultural clubs", "Coding club",
+        "Robotics club", "Drama club", "Music club", "Dance club", "Photography club",
+        "How to join clubs", "Extra curricular activities", "Student activities"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "exams",
+      "patterns": [
+        "Exam schedule", "When are exams", "Exam pattern", "Internal exams",
+        "Semester exams", "Exam fees", "Re-exam", "Supplementary exam", "Exam hall ticket",
+        "Exam results", "How to check results", "Result date", "Grading system"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "attendance",
+      "patterns": [
+        "Attendance requirement", "Minimum attendance", "Attendance percentage",
+        "How much attendance required", "Shortage of attendance", "Attendance policy",
+        "Can I get attendance concession", "Medical leave attendance"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "canteen",
+      "patterns": [
+        "Canteen facility", "Food available", "Canteen timings", "Cafeteria",
+        "Mess facility", "Food court", "What food is available", "Canteen menu",
+        "Breakfast available", "Lunch in college"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "alumni",
+      "patterns": [
+        "Alumni network", "Famous alumni", "Alumni association", "Alumni portal",
+        "Alumni meet", "Contact alumni", "Alumni achievements", "Past students"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "labs",
+      "patterns": [
+        "Laboratory facilities", "Computer lab", "Chemistry lab", "Physics lab",
+        "Engineering labs", "Workshop", "Lab equipment", "Lab timings",
+        "CAD lab", "Electronics lab", "Software lab"
+      ],
+      "responses": []
+    },
+    {
+      "tag": "help",
+      "patterns": [
+        "Help", "I need help", "Can you help me", "What can you do",
+        "How does this work", "Guide me", "Assist me", "Support"
+      ],
+      "responses": [
+        "I can help you with:\n• College timings, contact & facilities\n• Courses, fees & admissions\n• Faculty, departments & events\n• Placements, internships & scholarships\n• Hostel, transport & campus life\n• Exams, attendance & results\n\nJust ask your question!"
+      ]
+    }
+  ]
+}

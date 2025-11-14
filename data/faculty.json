@@ -1,0 +1,8 @@
+{
+  "principal": {"name": "Dr. Alice Johnson", "qualifications": "Ph.D. in Electrical Engineering", "email": "alice.johnson@examplecollege.edu"},
+  "hod_computer_science": {"name": "Prof. Bob Smith", "designation": "HOD - Computer Science", "phone": "+1-555-0123"},
+  "faculty": [
+    {"name": "Dr. Carol Lee", "dept": "Computer Science", "designation": "Associate Professor"},
+    {"name": "Prof. David Kim", "dept": "Mechanical", "designation": "Assistant Professor"}
+  ]
+}

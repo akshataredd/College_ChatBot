@@ -1,0 +1,124 @@
+{
+  "name": "Example College of Engineering",
+  "timings": "Monday - Friday: 9:00 AM - 5:00 PM, Saturday: 9:00 AM - 1:00 PM",
+  "address": "123 Campus Drive, College Town, State - 560001",
+  "website": "https://www.examplecollege.edu",
+  "contact": {
+    "phone": "+1-555-0100",
+    "email": "info@examplecollege.edu"
+  },
+  "departments": [
+    "Computer Science & Engineering",
+    "Mechanical Engineering",
+    "Electrical & Electronics Engineering",
+    "Civil Engineering",
+    "Electronics & Communication Engineering",
+    "Information Science & Engineering"
+  ],
+  "facilities": [
+    "Central Library with 50,000+ books",
+    "Boys & Girls Hostels",
+    "Sports Complex with gym",
+    "Medical Center with 24/7 ambulance",
+    "Computer Labs with latest software",
+    "Cafeteria & Food Court",
+    "Transportation facility",
+    "Wi-Fi enabled campus"
+  ],
+  "library": {
+    "timings": "Monday - Saturday: 8:00 AM - 8:00 PM",
+    "books": "50,000+ books and journals",
+    "digital": "E-library with IEEE, ACM access",
+    "reading_room": "Spacious reading hall with 200 seats"
+  },
+  "hostel": {
+    "available": "Yes",
+    "boys": "Boys hostel with 500 capacity",
+    "girls": "Girls hostel with 300 capacity",
+    "fees": "₹80,000 per year (includes mess)",
+    "contact": "hostel@examplecollege.edu"
+  },
+  "transport": {
+    "available": "Yes",
+    "routes": "15 routes covering major city areas",
+    "timings": "Bus service from 7:00 AM to 6:00 PM",
+    "fees": "₹15,000 per year"
+  },
+  "admission": {
+    "status": "Admissions Open for 2025-26",
+    "last_date": "August 31, 2025",
+    "eligibility": "60% in 12th grade (Science stream)",
+    "email": "admissions@examplecollege.edu",
+    "phone": "+1-555-0101"
+  },
+  "scholarship": {
+    "merit": "Merit-based scholarships available (up to 50% fee waiver)",
+    "financial_aid": "Financial assistance for economically backward students",
+    "government": "All government scholarships accepted",
+    "contact": "scholarship@examplecollege.edu"
+  },
+  "placements": {
+    "percentage": "85%",
+    "highest": "₹45 LPA",
+    "average": "₹8.5 LPA",
+    "companies": "Google, Microsoft, Amazon, Infosys, TCS, Wipro, Accenture",
+    "contact": "placements@examplecollege.edu"
+  },
+  "internship": {
+    "available": "Yes",
+    "duration": "6-8 weeks (during summer)",
+    "type": "Industry internships in top companies",
+    "contact": "training@examplecollege.edu"
+  },
+  "sports": {
+    "available": [
+      "Cricket ground",
+      "Football field",
+      "Basketball court",
+      "Badminton court",
+      "Indoor games room",
+      "Gymnasium"
+    ]
+  },
+  "clubs": {
+    "available": [
+      "Coding Club",
+      "Robotics Club",
+      "Drama Club",
+      "Music Club",
+      "Photography Club",
+      "Innovation & Entrepreneurship Cell"
+    ]
+  },
+  "exams": {
+    "pattern": "Semester system (2 semesters per year)",
+    "internal": "3 internal assessments per semester",
+    "semester": "University exams in May & December",
+    "results": "Published within 45 days on college portal"
+  },
+  "attendance": {
+    "minimum": "75% attendance mandatory",
+    "policy": "As per university norms",
+    "concession": "Medical certificates accepted for genuine cases"
+  },
+  "canteen": {
+    "available": "Yes",
+    "timings": "8:00 AM - 6:00 PM",
+    "menu": "Breakfast, lunch, snacks, beverages available"
+  },
+  "labs": {
+    "available": [
+      "Computer Science Lab",
+      "Electronics Lab",
+      "Physics Lab",
+      "Chemistry Lab",
+      "Mechanical Workshop",
+      "CAD/CAM Lab"
+    ]
+  },
+  "alumni": {
+    "network": "Active alumni network of 10,000+ members",
+    "portal": "alumni.examplecollege.edu",
+    "contact": "alumni@examplecollege.edu"
+  }
+}
