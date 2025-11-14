@@ -177,10 +177,10 @@ class Chatbot:
             intent_tag = None
             best_score = 0
             
-            # Check exact matches first
+            # Check exact matches first (but not for single digit queries)
             for intent, keywords in exact_matches.items():
                 for keyword in keywords:
-                    if keyword in text_lower and len(text_lower.split()) <= 3:
+                    if keyword in text_lower and len(text_lower.split()) <= 3 and not re.match(r'^\d+$', text_lower.strip()):
                         intent_tag = intent
                         best_score = 100
                         break

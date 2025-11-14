@@ -78,24 +78,32 @@
     "fees": "₹80,000 per year"
   },
   "MCA (Master of Computer Applications)": {
-    "duration": "2 years",
+    "duration": "4 years",
     "semesters": {
-      "1": ["Advanced Programming", "Data Structures", "Computer Networks", "Database Management"],
-      "2": ["Software Engineering", "Web Technologies", "AI & ML", "Cloud Computing"],
-      "3": ["Big Data Analytics", "Cybersecurity", "Mobile App Development", "Blockchain"],
-      "4": ["Project Work", "Internship", "Electives"]
+      "1": ["Programming Fundamentals", "Data Structures", "Mathematics for Computing", "Digital Electronics", "Communication Skills"],
+      "2": ["Object Oriented Programming", "Database Systems", "Computer Networks", "Web Technologies", "Discrete Mathematics"],
+      "3": ["Operating Systems", "Software Engineering", "Design & Analysis of Algorithms", "Computer Organization", "Probability & Statistics"],
+      "4": ["Python Programming", "Machine Learning", "Cloud Computing", "System Administration", "Java Programming"],
+      "5": ["Artificial Intelligence", "Big Data Analytics", "Cybersecurity", "Mobile App Development", "Elective I"],
+      "6": ["Deep Learning", "DevOps", "Blockchain Technology", "Full Stack Development", "Elective II"],
+      "7": ["Natural Language Processing", "IoT Applications", "Quantum Computing", "Project Phase I", "Elective III"],
+      "8": ["Industry Internship", "Major Project", "Seminar", "Elective IV"]
     },
     "fees": "₹1,20,000 per year",
     "eligibility": "BCA/B.Sc IT or equivalent with 50% marks"
   },
   "MBA (Master of Business Administration)": {
-    "duration": "2 years",
+    "duration": "4 years",
     "specializations": ["Finance", "Marketing", "Human Resources", "Operations Management", "Business Analytics"],
     "semesters": {
-      "1": ["Management Principles", "Business Economics", "Accounting", "Marketing Management"],
-      "2": ["Financial Management", "HR Management", "Operations Research", "Business Law"],
-      "3": ["Strategic Management", "Entrepreneurship", "Specialization Subjects", "Project Management"],
-      "4": ["Industry Project", "Internship", "Dissertation"]
+      "1": ["Principles of Management", "Business Economics", "Financial Accounting", "Marketing Management", "Business Communication"],
+      "2": ["Organizational Behavior", "Managerial Economics", "Business Statistics", "Business Law", "Operations Management"],
+      "3": ["Financial Management", "Human Resource Management", "Operations Research", "Business Research Methods", "Corporate Strategy"],
+      "4": ["International Business", "Entrepreneurship Development", "Digital Marketing", "Supply Chain Management", "Project Management"],
+      "5": ["Strategic Management", "Investment Analysis", "Brand Management", "Leadership & Change Management", "Specialization I"],
+      "6": ["Business Analytics", "Corporate Governance", "Retail Management", "International Finance", "Specialization II"],
+      "7": ["E-Commerce", "Business Ethics", "Innovation Management", "Project Phase I", "Specialization III"],
+      "8": ["Industry Internship", "Major Project", "Dissertation", "Specialization IV"]
     },
     "fees": "₹1,50,000 per year",
     "eligibility": "Bachelor's degree with 50% marks"
