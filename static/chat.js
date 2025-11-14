@@ -22,7 +22,31 @@ async function send(){
   appendMessage('bot', j.reply)
   // request server-side TTS for the bot reply and play it
   try{
-    const ttsRes = await fetch('/api/tts', {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({text: j.reply})})
+    let currentAudio = null;
+
+function speakResponse(text) {
+    // Stop any currently playing audio
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+    
+    fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+        currentAudio = new Audio(URL.createObjectURL(blob));
+        currentAudio.play();
+        
+        // Clear reference when audio finishes
+        currentAudio.onended = () => {
+            currentAudio = null;
+        };
+    });
+}
     if(ttsRes.ok){
       const blob = await ttsRes.blob()
       const url = URL.createObjectURL(blob)

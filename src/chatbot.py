@@ -51,13 +51,20 @@ class Chatbot:
         
         text_lower = text.lower()
         
-        # Extract semester number
-        sem_match = re.search(r'\b(semester|sem)\s*(\d+)\b', text_lower)
+        # Extract semester number - multiple patterns
+        # Pattern 1: "semester 1", "sem 1", "sem1"
+        sem_match = re.search(r'\b(?:semester|sem)\s*(\d+)\b', text_lower)
         if sem_match:
-            entities['semester'] = sem_match.group(2)
+            entities['semester'] = sem_match.group(1)
+        # Pattern 2: standalone number (1-8)
+        elif re.search(r'^\d+$', text_lower.strip()):
+            # Just a number by itself
+            num = text_lower.strip()
+            if num in ['1', '2', '3', '4', '5', '6', '7', '8']:
+                entities['semester'] = num
+        # Pattern 3: number in text
         else:
-            # Look for standalone numbers that might be semesters (1-8)
-            num_match = re.search(r'\b([1-8])\b', text_lower)
+            num_match = re.search(r'\b([1-8])(?:st|nd|rd|th)?\b', text_lower)
             if num_match:
                 entities['semester'] = num_match.group(1)
         
@@ -98,19 +105,37 @@ class Chatbot:
         """
         text_lower = user_input.lower()
         
+        # Check if user is asking about a specific department/course or semester
+        dept_keywords = ['cse', 'computer science', 'cs', 'ece', 'electronics', 'mechanical', 
+                        'mech', 'civil', 'eee', 'electrical', 'it', 'information technology',
+                        'mca', 'mba', 'master', 'b.tech', 'btech', 'engineering']
+        
+        sem_keywords = ['semester', 'sem', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th',
+                       'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth']
+        
+        is_dept_query = any(keyword in text_lower for keyword in dept_keywords)
+        is_sem_query = any(keyword in text_lower for keyword in sem_keywords) or re.match(r'^\d+$', text_lower.strip())
+        
+        # Check if just a number and previous context was courses
+        if re.match(r'^\d+$', text_lower.strip()) and self.context:
+            for prev in reversed(self.context):
+                if prev.get('intent') == 'courses':
+                    is_sem_query = True
+                    break
+        
         # Intent patterns with fuzzy matching
         intent_patterns = {
             'greeting': 'hi hello hey good morning afternoon evening namaste greetings',
             'goodbye': 'bye goodbye see you later exit quit',
             'thanks': 'thank thanks appreciate grateful',
             'college_timings': 'college timing time hour schedule open close start working office',
-            'departments': 'department branch stream engineering course program',
+            'departments': 'what which show list all available department branch stream',
             'facilities': 'facility infrastructure campus amenity building',
             'library': 'library book digital elib reading room journal',
             'hostel': 'hostel accommodation residence stay room warden mess',
             'transport': 'transport bus shuttle vehicle route pickup',
             'contact': 'contact phone email address reach location where find',
-            'courses': 'course subject syllabus curriculum semester sem topic taught',
+            'courses': 'course subject syllabus curriculum semester sem topic taught program specialization',
             'admission': 'admission apply enroll eligibility requirement join entry',
             'fees': 'fee cost price tuition payment installment money',
             'scholarship': 'scholarship financial aid concession waiver free education loan',
@@ -128,24 +153,29 @@ class Chatbot:
             'alumni': 'alumni graduate past student network association'
         }
         
-        # Use fuzzy matching on entire query against all intent patterns
-        best_match = None
-        best_score = 0
-        
-        for intent, pattern in intent_patterns.items():
-            score = fuzz.partial_ratio(text_lower, pattern)
-            # Also check token-based similarity
-            token_score = fuzz.token_set_ratio(text_lower, pattern)
-            final_score = max(score, token_score)
+        # If it's a department/semester query, force it to 'courses' intent
+        if (is_dept_query or is_sem_query) and len(text_lower.split()) <= 5:  # Short queries
+            intent_tag = 'courses'
+            best_score = 100
+        else:
+            # Use fuzzy matching on entire query against all intent patterns
+            best_match = None
+            best_score = 0
             
-            if final_score > best_score:
-                best_score = final_score
-                best_match = intent
-        
-        # Use the best match if confidence is high enough
-        intent_tag = None
-        if best_score > 60:  # 60% similarity threshold
-            intent_tag = best_match
+            for intent, pattern in intent_patterns.items():
+                score = fuzz.partial_ratio(text_lower, pattern)
+                # Also check token-based similarity
+                token_score = fuzz.token_set_ratio(text_lower, pattern)
+                final_score = max(score, token_score)
+                
+                if final_score > best_score:
+                    best_score = final_score
+                    best_match = intent
+            
+            # Use the best match if confidence is high enough
+            intent_tag = None
+            if best_score > 60:  # 60% similarity threshold
+                intent_tag = best_match
         
         # If still no match, use ML classifier as fallback
         if not intent_tag:
@@ -158,6 +188,15 @@ class Chatbot:
         
         # Extract entities
         entities = self.extract_entities(user_input)
+        
+        # Special handling: if just a number and recent context was courses, treat as semester
+        if not entities.get('semester') and not entities.get('department'):
+            if re.match(r'^\d+$', user_input.strip()) and self.context:
+                # Check if previous message was about courses
+                for prev in reversed(self.context):
+                    if prev.get('intent') == 'courses':
+                        entities['semester'] = user_input.strip()
+                        break
         
         # Update context
         self.context.append({
@@ -334,31 +373,100 @@ class Chatbot:
         dept = entities.get('department')
         sem = entities.get('semester')
         
+        # Get user input from context
+        user_input_lower = ''
+        if self.context:
+            user_input_lower = self.context[-1].get('input', '').lower()
+        
+        # Check if user just entered a semester number (look for dept in previous context)
+        if not dept and self.context and len(self.context) > 1:
+            # Look for department in previous context
+            for prev in reversed(self.context[:-1]):
+                if prev.get('intent') == 'courses':
+                    prev_entities = prev.get('entities', {})
+                    prev_dept = prev_entities.get('department')
+                    if prev_dept:
+                        dept = prev_dept
+                        # Use semester from current entities if extracted
+                        if not sem:
+                            sem = entities.get('semester')
+                        break
+        
+        # Better department matching
         if not dept:
-            # List all departments
-            depts = ', '.join(self.courses.keys())
-            return f"📖 Available Departments:\n\n{depts}\n\n" \
-                   "Please specify a department to see course details."
+            # Check if user mentioned specific dept keywords
+            dept_mapping = {
+                'cse': 'Computer Science Engineering (CSE)',
+                'computer science': 'Computer Science Engineering (CSE)',
+                'cs': 'Computer Science Engineering (CSE)',
+                'ece': 'Electronics & Communication (ECE)',
+                'electronics': 'Electronics & Communication (ECE)',
+                'mechanical': 'Mechanical Engineering',
+                'mech': 'Mechanical Engineering',
+                'civil': 'Civil Engineering',
+                'eee': 'Electrical & Electronics (EEE)',
+                'electrical': 'Electrical & Electronics (EEE)',
+                'it': 'Information Technology (IT)',
+                'information technology': 'Information Technology (IT)',
+                'mca': 'MCA (Master of Computer Applications)',
+                'mba': 'MBA (Master of Business Administration)'
+            }
+            
+            for keyword, full_name in dept_mapping.items():
+                if keyword in user_input_lower:
+                    dept = full_name
+                    break
+        
+        if not dept:
+            # List all departments with better formatting
+            ug_programs = []
+            pg_programs = []
+            for name in self.courses.keys():
+                if 'MCA' in name or 'MBA' in name:
+                    pg_programs.append(name)
+                else:
+                    ug_programs.append(name)
+            
+            response = "📚 **Available Programs**\n\n"
+            response += "**🎓 UG Programs (B.Tech):**\n"
+            for i, prog in enumerate(ug_programs, 1):
+                response += f"{i}. {prog}\n"
+            response += "\n**🎓 PG Programs:**\n"
+            for i, prog in enumerate(pg_programs, 1):
+                response += f"{i}. {prog}\n"
+            response += "\n💡 Ask about any specific program for details!"
+            return response
         
         if dept not in self.courses:
             return f"Sorry, I don't have information about {dept}. " \
-                   f"Available departments: {', '.join(self.courses.keys())}"
+                   f"Please ask about available departments."
         
         dept_data = self.courses[dept]
         
         if sem and sem in dept_data.get('semesters', {}):
             subjects = dept_data['semesters'][sem]
-            return self._format_list_response(
-                f"📖 {dept} - Semester {sem}",
-                subjects
-            )
+            response = f"📖 **{dept}**\n**Semester {sem} Subjects:**\n\n"
+            for i, subj in enumerate(subjects, 1):
+                response += f"{i}. {subj}\n"
+            return response
         else:
             sems = ', '.join(dept_data.get('semesters', {}).keys())
             fees = dept_data.get('fees', 'N/A')
-            return f"📖 {dept}\n\n" \
-                   f"Available Semesters: {sems}\n" \
-                   f"💰 Fees: {fees}\n\n" \
-                   "Please specify a semester number (e.g., 'semester 1')"
+            duration = dept_data.get('duration', '4 years')
+            eligibility = dept_data.get('eligibility', '')
+            specializations = dept_data.get('specializations', [])
+            
+            response = f"📖 **{dept}**\n\n"
+            if duration:
+                response += f"⏱️ Duration: {duration}\n"
+            response += f"💰 Fees: {fees}\n"
+            if eligibility:
+                response += f"✅ Eligibility: {eligibility}\n"
+            if specializations:
+                response += f"🎯 Specializations: {', '.join(specializations)}\n"
+            response += f"\n📋 Semesters: {sems}\n"
+            response += "\n💡 Ask about specific semester for subject details!"
+            return response
     
     def _handle_fees(self, entities):
         """Handle fee-related queries"""

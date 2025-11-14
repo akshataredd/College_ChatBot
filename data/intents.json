@@ -105,7 +105,17 @@
         "What courses do you offer", "Available courses", "Course details", "Syllabus information",
         "Subject list", "Which subjects are taught", "Tell me about courses", "Semester subjects",
         "What subjects in first year", "Course curriculum", "Subjects in computer science",
-        "Mechanical engineering subjects", "Civil subjects", "ECE syllabus"
+        "Mechanical engineering subjects", "Civil subjects", "ECE syllabus",
+        "CSE", "Computer Science", "CS", "Computer Science Engineering",
+        "ECE", "Electronics", "Electronics and Communication",
+        "Mechanical", "Mech", "Mechanical Engineering",
+        "Civil", "Civil Engineering",
+        "EEE", "Electrical", "Electrical and Electronics",
+        "IT", "Information Technology", "Information Science",
+        "tell me about CSE", "tell me about ECE", "tell me about mechanical",
+        "tell me about civil", "tell me about EEE", "tell me about IT",
+        "CSE courses", "ECE courses", "Mechanical courses", "Civil courses",
+        "what is CSE", "what is ECE", "what about CSE", "what about mechanical"
       ],
       "responses": []
     },

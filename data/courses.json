@@ -1,14 +1,103 @@
 {
-  "Computer Science": {
+  "Computer Science Engineering (CSE)": {
     "semesters": {
-      "1": ["Mathematics I", "Physics", "Introduction to Programming"],
-      "2": ["Mathematics II", "Data Structures", "Digital Logic"],
-      "3": ["Algorithms", "Operating Systems", "Discrete Math"]
+      "1": ["Mathematics I", "Physics", "Introduction to Programming", "Engineering Graphics", "Basic Electronics"],
+      "2": ["Mathematics II", "Data Structures", "Digital Logic", "Chemistry", "English Communication"],
+      "3": ["Algorithms", "Operating Systems", "Discrete Math", "Computer Networks", "Probability & Statistics"],
+      "4": ["Database Management", "Software Engineering", "Web Technologies", "OOP Concepts", "Microprocessors"],
+      "5": ["Compiler Design", "Computer Graphics", "Machine Learning", "Theory of Computation", "Elective I"],
+      "6": ["Artificial Intelligence", "Cloud Computing", "Cybersecurity", "Mobile App Development", "Elective II"],
+      "7": ["Big Data Analytics", "IoT", "Blockchain Technology", "Project Phase I", "Elective III"],
+      "8": ["Industry Internship", "Major Project", "Seminar", "Elective IV"]
     },
-    "fees": "$4000 per semester"
+    "fees": "₹80,000 per year"
   },
-  "Mechanical": {
-    "semesters": {"1": ["Engineering Mechanics", "Chemistry"], "2": ["Thermodynamics"]},
-    "fees": "$3800 per semester"
+  "Electronics & Communication (ECE)": {
+    "semesters": {
+      "1": ["Basic Electronics", "Circuit Theory", "Mathematics I", "Physics", "Engineering Graphics"],
+      "2": ["Analog Electronics", "Digital Circuits", "Signals and Systems", "Mathematics II", "Chemistry"],
+      "3": ["Electronic Devices", "Network Theory", "Electromagnetic Fields", "Control Systems", "Probability"],
+      "4": ["Microprocessors", "Communication Systems", "Digital Signal Processing", "Linear ICs", "Power Electronics"],
+      "5": ["Antenna Theory", "Microwave Engineering", "VLSI Design", "Optical Communication", "Elective I"],
+      "6": ["Embedded Systems", "Wireless Communication", "Digital Communication", "Satellite Communication", "Elective II"],
+      "7": ["IoT", "5G Technology", "Image Processing", "Project Phase I", "Elective III"],
+      "8": ["Industry Internship", "Major Project", "Seminar", "Elective IV"]
+    },
+    "fees": "₹75,000 per year"
+  },
+  "Mechanical Engineering": {
+    "semesters": {
+      "1": ["Engineering Mechanics", "Chemistry", "Workshop Technology", "Engineering Drawing", "Mathematics I"],
+      "2": ["Thermodynamics", "Strength of Materials", "Manufacturing Processes", "Fluid Mechanics", "Mathematics II"],
+      "3": ["Kinematics of Machines", "Material Science", "Heat Transfer", "Machine Drawing", "Engineering Economics"],
+      "4": ["Dynamics of Machines", "Design of Machine Elements", "Turbo Machines", "Metrology", "CAD/CAM"],
+      "5": ["IC Engines", "Automobile Engineering", "Production Technology", "Refrigeration & AC", "Elective I"],
+      "6": ["Power Plant Engineering", "CNC Machines", "Finite Element Analysis", "Industrial Engineering", "Elective II"],
+      "7": ["Robotics", "Additive Manufacturing", "Mechatronics", "Project Phase I", "Elective III"],
+      "8": ["Industry Internship", "Major Project", "Seminar", "Elective IV"]
+    },
+    "fees": "₹70,000 per year"
+  },
+  "Civil Engineering": {
+    "semesters": {
+      "1": ["Engineering Mechanics", "Building Materials", "Surveying", "Mathematics I", "Engineering Drawing"],
+      "2": ["Structural Analysis", "Geotechnical Engineering", "Fluid Mechanics", "Mathematics II", "Environmental Science"],
+      "3": ["Concrete Technology", "Soil Mechanics", "Hydraulics", "Transportation Engineering I", "Strength of Materials"],
+      "4": ["RCC Design", "Foundation Engineering", "Water Resources Engineering", "Highway Engineering", "Estimation & Costing"],
+      "5": ["Steel Structures", "Environmental Engineering", "Construction Management", "GIS & Remote Sensing", "Elective I"],
+      "6": ["Pre-stressed Concrete", "Bridge Engineering", "Irrigation Engineering", "Quantity Surveying", "Elective II"],
+      "7": ["Earthquake Engineering", "Smart Cities", "Advanced Construction Techniques", "Project Phase I", "Elective III"],
+      "8": ["Industry Internship", "Major Project", "Seminar", "Elective IV"]
+    },
+    "fees": "₹70,000 per year"
+  },
+  "Electrical & Electronics (EEE)": {
+    "semesters": {
+      "1": ["Electrical Circuits", "Network Theory", "Mathematics I", "Physics", "Engineering Graphics"],
+      "2": ["Electromagnetic Theory", "Electrical Machines I", "Analog Electronics", "Mathematics II", "Chemistry"],
+      "3": ["Electrical Machines II", "Power Systems I", "Control Systems", "Digital Electronics", "Measurements"],
+      "4": ["Power Electronics", "Power Systems II", "Microprocessors", "Linear ICs", "Signals & Systems"],
+      "5": ["Transmission & Distribution", "Electrical Drives", "Power System Protection", "Digital Signal Processing", "Elective I"],
+      "6": ["Renewable Energy Systems", "HVDC Transmission", "Embedded Systems", "Industrial Automation", "Elective II"],
+      "7": ["Smart Grid Technology", "Electric Vehicles", "AI in Power Systems", "Project Phase I", "Elective III"],
+      "8": ["Industry Internship", "Major Project", "Seminar", "Elective IV"]
+    },
+    "fees": "₹75,000 per year"
+  },
+  "Information Technology (IT)": {
+    "semesters": {
+      "1": ["Programming in C", "Digital Logic", "Mathematics I", "Physics", "Engineering Graphics"],
+      "2": ["Data Structures", "Computer Organization", "Database Systems", "Mathematics II", "Chemistry"],
+      "3": ["Java Programming", "Computer Networks", "Operating Systems", "Web Technologies", "Discrete Math"],
+      "4": ["Software Engineering", "Python Programming", "DBMS", "System Administration", "Probability"],
+      "5": ["Cloud Computing", "Information Security", "Data Analytics", "Mobile Computing", "Elective I"],
+      "6": ["Machine Learning", "DevOps", "Blockchain", "Full Stack Development", "Elective II"],
+      "7": ["AI & Deep Learning", "IoT Applications", "Quantum Computing", "Project Phase I", "Elective III"],
+      "8": ["Industry Internship", "Major Project", "Seminar", "Elective IV"]
+    },
+    "fees": "₹80,000 per year"
+  },
+  "MCA (Master of Computer Applications)": {
+    "duration": "2 years",
+    "semesters": {
+      "1": ["Advanced Programming", "Data Structures", "Computer Networks", "Database Management"],
+      "2": ["Software Engineering", "Web Technologies", "AI & ML", "Cloud Computing"],
+      "3": ["Big Data Analytics", "Cybersecurity", "Mobile App Development", "Blockchain"],
+      "4": ["Project Work", "Internship", "Electives"]
+    },
+    "fees": "₹1,20,000 per year",
+    "eligibility": "BCA/B.Sc IT or equivalent with 50% marks"
+  },
+  "MBA (Master of Business Administration)": {
+    "duration": "2 years",
+    "specializations": ["Finance", "Marketing", "Human Resources", "Operations Management", "Business Analytics"],
+    "semesters": {
+      "1": ["Management Principles", "Business Economics", "Accounting", "Marketing Management"],
+      "2": ["Financial Management", "HR Management", "Operations Research", "Business Law"],
+      "3": ["Strategic Management", "Entrepreneurship", "Specialization Subjects", "Project Management"],
+      "4": ["Industry Project", "Internship", "Dissertation"]
+    },
+    "fees": "₹1,50,000 per year",
+    "eligibility": "Bachelor's degree with 50% marks"
   }
 }
