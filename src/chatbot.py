@@ -125,32 +125,32 @@ class Chatbot:
         
         # Intent patterns with fuzzy matching
         intent_patterns = {
-            'greeting': 'hi hello hey good morning afternoon evening namaste greetings',
-            'goodbye': 'bye goodbye see you later exit quit',
-            'thanks': 'thank thanks appreciate grateful',
-            'college_timings': 'college timing time hour schedule open close start working office',
-            'departments': 'what which show list all available department branch stream',
-            'facilities': 'facility infrastructure campus amenity building',
-            'library': 'library book digital elib reading room journal',
-            'hostel': 'hostel accommodation residence stay room warden mess',
-            'transport': 'transport bus shuttle vehicle route pickup',
-            'contact': 'contact phone email address reach location where find',
+            'greeting': 'hi hello hey good morning afternoon evening namaste greetings hola howdy',
+            'goodbye': 'bye goodbye see you later exit quit thanks bye farewell',
+            'thanks': 'thank thanks appreciate grateful thankyou',
+            'college_timings': 'college timing time hour schedule open close start working office when does college',
+            'departments': 'what which show list all available department branch stream how many departments tell me about departments',
+            'facilities': 'facility infrastructure campus amenity building what facilities available campus facilities',
+            'library': 'library book digital elib reading room journal library facility library timing',
+            'hostel': 'hostel accommodation residence stay room warden mess hostel facility hostel fee',
+            'transport': 'transport bus shuttle vehicle route pickup bus facility college bus',
+            'contact': 'contact phone email address reach location where find contact details contact number',
             'courses': 'course subject syllabus curriculum semester sem topic taught program specialization',
-            'admission': 'admission apply enroll eligibility requirement join entry',
-            'fees': 'fee cost price tuition payment installment money',
-            'scholarship': 'scholarship financial aid concession waiver free education loan',
-            'placements': 'placement job recruit package salary company career opportunity',
-            'internship': 'internship training industrial project summer',
-            'faculty': 'faculty teacher professor staff lecturer instructor',
-            'principal': 'principal director head dean chief',
-            'events': 'event fest festival workshop seminar conference holiday program',
-            'sports': 'sport game gym cricket football basketball athletic fitness',
-            'clubs': 'club society activity extracurricular cultural technical',
-            'exams': 'exam test assessment evaluation result grade mark',
-            'attendance': 'attendance present absent leave percentage minimum',
-            'canteen': 'canteen cafeteria food mess lunch breakfast snack',
-            'labs': 'lab laboratory workshop practical equipment computer',
-            'alumni': 'alumni graduate past student network association'
+            'admission': 'admission apply enroll eligibility requirement join entry how to apply admission process',
+            'fees': 'fee cost price tuition payment installment money fee structure course fees',
+            'scholarship': 'scholarship financial aid concession waiver free education loan scholarship available',
+            'placements': 'placement job recruit package salary company career opportunity placement record companies visit',
+            'internship': 'internship training industrial project summer internship opportunities',
+            'faculty': 'faculty teacher professor staff lecturer instructor faculty details faculty members',
+            'principal': 'principal director head dean chief who is principal',
+            'events': 'event fest festival workshop seminar conference holiday program upcoming events',
+            'sports': 'sport game gym cricket football basketball athletic fitness sports facility playground',
+            'clubs': 'club society activity extracurricular cultural technical student clubs',
+            'exams': 'exam test assessment evaluation result grade mark examination pattern exam schedule',
+            'attendance': 'attendance present absent leave percentage minimum attendance required attendance policy',
+            'canteen': 'canteen cafeteria food mess lunch breakfast snack canteen facility food available',
+            'labs': 'lab laboratory workshop practical equipment computer lab facility laboratory equipment',
+            'alumni': 'alumni graduate past student network association alumni network'
         }
         
         # If it's a department/semester query, force it to 'courses' intent
@@ -158,24 +158,52 @@ class Chatbot:
             intent_tag = 'courses'
             best_score = 100
         else:
-            # Use fuzzy matching on entire query against all intent patterns
-            best_match = None
+            # Exact keyword matching first (higher priority)
+            exact_matches = {
+                'departments': ['departments', 'department', 'branches', 'branch'],
+                'courses': ['courses', 'programs', 'what courses'],
+                'events': ['events', 'event', 'fest', 'festival', 'workshop'],
+                'placements': ['placements', 'placement', 'companies', 'package'],
+                'hostel': ['hostel', 'accommodation', 'hostel facility'],
+                'library': ['library', 'library facility', 'books'],
+                'canteen': ['canteen', 'cafeteria', 'food'],
+                'labs': ['lab', 'laboratory', 'computer lab'],
+                'sports': ['sports', 'sport', 'gym', 'playground'],
+                'facilities': ['facilities', 'infrastructure', 'campus'],
+                'admission': ['admission', 'admissions', 'how to apply'],
+                'contact': ['contact', 'phone', 'email', 'address']
+            }
+            
+            intent_tag = None
             best_score = 0
             
-            for intent, pattern in intent_patterns.items():
-                score = fuzz.partial_ratio(text_lower, pattern)
-                # Also check token-based similarity
-                token_score = fuzz.token_set_ratio(text_lower, pattern)
-                final_score = max(score, token_score)
-                
-                if final_score > best_score:
-                    best_score = final_score
-                    best_match = intent
+            # Check exact matches first
+            for intent, keywords in exact_matches.items():
+                for keyword in keywords:
+                    if keyword in text_lower and len(text_lower.split()) <= 3:
+                        intent_tag = intent
+                        best_score = 100
+                        break
+                if intent_tag:
+                    break
             
-            # Use the best match if confidence is high enough
-            intent_tag = None
-            if best_score > 60:  # 60% similarity threshold
-                intent_tag = best_match
+            # If no exact match, use fuzzy matching
+            if not intent_tag:
+                best_match = None
+                
+                for intent, pattern in intent_patterns.items():
+                    score = fuzz.partial_ratio(text_lower, pattern)
+                    # Also check token-based similarity
+                    token_score = fuzz.token_set_ratio(text_lower, pattern)
+                    final_score = max(score, token_score)
+                    
+                    if final_score > best_score:
+                        best_score = final_score
+                        best_match = intent
+                
+                # Use the best match if confidence is high enough
+                if best_score > 60:  # 60% similarity threshold
+                    intent_tag = best_match
         
         # If still no match, use ML classifier as fallback
         if not intent_tag:

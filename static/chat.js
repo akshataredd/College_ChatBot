@@ -1,77 +1,136 @@
-const chatBox = document.getElementById('chat')
-const input = document.getElementById('input')
-const sendBtn = document.getElementById('send')
-const voiceBtn = document.getElementById('voice')
+let messageCount = 0;
 
-function appendMessage(who, text){
-  const el = document.createElement('div')
-  el.className = 'msg ' + who
-  el.textContent = text
-  chatBox.appendChild(el)
-  chatBox.scrollTop = chatBox.scrollHeight
+// Theme toggle
+const themeToggle = document.getElementById('theme-toggle');
+const savedTheme = localStorage.getItem('theme') || 'light';
+if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+    themeToggle.textContent = '☀️';
 }
 
-async function send(){
-  const text = input.value.trim()
-  if(!text) return
-  appendMessage('user', text)
-  input.value = ''
-  const res = await fetch('/api/chat', {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({message:text})})
-  if(!res.ok){ appendMessage('bot', 'Error contacting server'); return }
-  const j = await res.json()
-  appendMessage('bot', j.reply)
-  // request server-side TTS for the bot reply and play it
-  try{
-    let currentAudio = null;
+themeToggle?.addEventListener('click', () => {
+    document.body.classList.toggle('dark-theme');
+    const isDark = document.body.classList.contains('dark-theme');
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+});
 
-function speakResponse(text) {
-    // Stop any currently playing audio
-    if (currentAudio) {
-        currentAudio.pause();
-        currentAudio.currentTime = 0;
+// Get current time
+function getTime() {
+    const now = new Date();
+    return now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+}
+
+// Show typing indicator
+function showTyping() {
+    document.getElementById('typing').style.display = 'flex';
+    scrollToBottom();
+}
+
+function hideTyping() {
+    document.getElementById('typing').style.display = 'none';
+}
+
+// Add message to chat
+function addMessage(text, sender) {
+    const chatbox = document.getElementById('chatbox');
+    
+    // Remove welcome message after first interaction
+    if (messageCount === 0) {
+        const welcome = chatbox.querySelector('.welcome-message');
+        if (welcome) welcome.remove();
+    }
+    messageCount++;
+    
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `msg ${sender}`;
+    msgDiv.innerHTML = text + `<span class="msg-time">${getTime()}</span>`;
+    chatbox.appendChild(msgDiv);
+    scrollToBottom();
+}
+
+function scrollToBottom() {
+    const chatbox = document.getElementById('chatbox');
+    chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+// Send message
+async function send() {
+    const input = document.getElementById('user-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+    
+    addMessage(msg, 'user');
+    input.value = '';
+    
+    showTyping();
+    
+    try {
+        const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: msg })
+        });
+        
+        hideTyping();
+        
+        if (!res.ok) throw new Error('Server error');
+        
+        const data = await res.json();
+        addMessage(data.reply, 'bot');
+        
+    } catch (err) {
+        hideTyping();
+        addMessage('⚠️ Sorry, I encountered an error. Please try again.', 'bot');
+    }
+}
+
+// Quick reply function
+function sendQuickReply(text) {
+    const input = document.getElementById('user-input');
+    input.value = text;
+    send();
+}
+
+// Voice input (no TTS output)
+const voiceBtn = document.getElementById('voice');
+voiceBtn?.addEventListener('click', () => {
+    if (!('webkitSpeechRecognition' in window)) {
+        alert('Voice input not supported in this browser');
+        return;
     }
     
-    fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text })
-    })
-    .then(res => res.blob())
-    .then(blob => {
-        currentAudio = new Audio(URL.createObjectURL(blob));
-        currentAudio.play();
-        
-        // Clear reference when audio finishes
-        currentAudio.onended = () => {
-            currentAudio = null;
-        };
-    });
-}
-    if(ttsRes.ok){
-      const blob = await ttsRes.blob()
-      const url = URL.createObjectURL(blob)
-      const audio = new Audio(url)
-      audio.play().catch(e=>console.warn('TTS play failed', e))
-    }
-  }catch(e){ console.warn('TTS request failed', e) }
-}
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    
+    voiceBtn.style.background = '#ef4444';
+    voiceBtn.textContent = '⏺️';
+    
+    recognition.onresult = (e) => {
+        const transcript = e.results[0][0].transcript;
+        document.getElementById('user-input').value = transcript;
+        send();
+    };
+    
+    recognition.onend = () => {
+        voiceBtn.style.background = '';
+        voiceBtn.textContent = '🎤';
+    };
+    
+    recognition.onerror = () => {
+        voiceBtn.style.background = '';
+        voiceBtn.textContent = '🎤';
+        alert('Voice input failed');
+    };
+    
+    recognition.start();
+});
 
-sendBtn.addEventListener('click', send)
-input.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') send() })
+// Send button
+document.getElementById('send')?.addEventListener('click', send);
 
-// Basic voice input using Web Speech API
-if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition
-  const recog = new SR()
-  recog.lang = 'en-US'
-  recog.interimResults = false
-  voiceBtn.addEventListener('click', ()=>{ recog.start() })
-  recog.onresult = (ev)=>{
-    const text = ev.results[0][0].transcript
-    input.value = text
-    send()
-  }
-  recog.onerror = (ev)=>{ appendMessage('bot', 'Voice input error: '+ev.error) }
-} else {
-  voiceBtn.disabled = true
-}
+// Enter key
+document.getElementById('user-input')?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') send();
+});
