@@ -25,7 +25,8 @@ class Chatbot:
         self.faculty = self.load_json('faculty.json')
         self.events = self.load_json('events.json')
         self.context = []
-        self.max_context = 5
+        self.max_context = 10
+        self.current_department = None
         
     def load_json(self, filename):
         """Load JSON data file"""
@@ -406,44 +407,55 @@ class Chatbot:
         if self.context:
             user_input_lower = self.context[-1].get('input', '').lower()
         
-        # Check if user just entered a semester number (look for dept in previous context)
-        if not dept and self.context and len(self.context) > 1:
-            # Look for department in previous context
-            for prev in reversed(self.context[:-1]):
-                if prev.get('intent') == 'courses':
-                    prev_entities = prev.get('entities', {})
-                    prev_dept = prev_entities.get('department')
-                    if prev_dept:
-                        dept = prev_dept
-                        # Use semester from current entities if extracted
-                        if not sem:
-                            sem = entities.get('semester')
-                        break
+        # Department mapping for better matching
+        dept_mapping = {
+            'cse': 'Computer Science Engineering (CSE)',
+            'computer science': 'Computer Science Engineering (CSE)',
+            'cs': 'Computer Science Engineering (CSE)',
+            'ece': 'Electronics & Communication (ECE)',
+            'electronics': 'Electronics & Communication (ECE)',
+            'mechanical': 'Mechanical Engineering',
+            'mech': 'Mechanical Engineering',
+            'civil': 'Civil Engineering',
+            'eee': 'Electrical & Electronics (EEE)',
+            'electrical': 'Electrical & Electronics (EEE)',
+            'it': 'Information Technology (IT)',
+            'information technology': 'Information Technology (IT)',
+            'mca': 'MCA (Master of Computer Applications)',
+            'mba': 'MBA (Master of Business Administration)'
+        }
         
-        # Better department matching
+        # Check current input for department keywords first
+        for keyword, full_name in dept_mapping.items():
+            if keyword in user_input_lower:
+                dept = full_name
+                self.current_department = dept  # Remember this department
+                break
+        
+        # If no dept found in current input, check context
         if not dept:
-            # Check if user mentioned specific dept keywords
-            dept_mapping = {
-                'cse': 'Computer Science Engineering (CSE)',
-                'computer science': 'Computer Science Engineering (CSE)',
-                'cs': 'Computer Science Engineering (CSE)',
-                'ece': 'Electronics & Communication (ECE)',
-                'electronics': 'Electronics & Communication (ECE)',
-                'mechanical': 'Mechanical Engineering',
-                'mech': 'Mechanical Engineering',
-                'civil': 'Civil Engineering',
-                'eee': 'Electrical & Electronics (EEE)',
-                'electrical': 'Electrical & Electronics (EEE)',
-                'it': 'Information Technology (IT)',
-                'information technology': 'Information Technology (IT)',
-                'mca': 'MCA (Master of Computer Applications)',
-                'mba': 'MBA (Master of Business Administration)'
-            }
-            
-            for keyword, full_name in dept_mapping.items():
-                if keyword in user_input_lower:
-                    dept = full_name
-                    break
+            # First check if we have a remembered department
+            if self.current_department:
+                dept = self.current_department
+            # Otherwise look in previous messages
+            elif self.context and len(self.context) > 1:
+                for prev in reversed(self.context[:-1]):
+                    if prev.get('intent') == 'courses':
+                        prev_entities = prev.get('entities', {})
+                        prev_dept = prev_entities.get('department')
+                        if prev_dept:
+                            dept = prev_dept
+                            self.current_department = dept
+                            break
+                        # Also check the input text of previous message
+                        prev_input = prev.get('input', '').lower()
+                        for keyword, full_name in dept_mapping.items():
+                            if keyword in prev_input:
+                                dept = full_name
+                                self.current_department = dept
+                                break
+                        if dept:
+                            break
         
         if not dept:
             # List all departments with better formatting
