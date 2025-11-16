@@ -106,6 +106,13 @@ class Chatbot:
         """
         text_lower = user_input.lower()
         
+        # Reset department context if user asks generic questions
+        reset_keywords = ['all courses', 'all programs', 'what courses', 'which courses', 
+                         'available courses', 'available programs', 'show courses', 'list courses',
+                         'show programs', 'list programs', 'tell me courses', 'tell me programs']
+        if any(keyword in text_lower for keyword in reset_keywords) or text_lower.strip() in ['courses', 'programs', 'course', 'program']:
+            self.current_department = None
+        
         # Check if user is asking about a specific department/course or semester
         dept_keywords = ['cse', 'computer science', 'cs', 'ece', 'electronics', 'mechanical', 
                         'mech', 'civil', 'eee', 'electrical', 'it', 'information technology',
@@ -257,84 +264,100 @@ class Chatbot:
         
         # Dynamic responses based on data
         if intent_tag == 'college_timings':
-            return self._format_response(
-                "🕒 College Timings",
-                self.college_info.get('timings', 'Timings not available')
-            )
+            timings = self.college_info.get('timings', 'Timings not available')
+            return f"🕒 **College Timings**\n\n" \
+                   f"📅 {timings}\n\n" \
+                   f"💡 *Please arrive 10 minutes before class starts!*"
         
         elif intent_tag == 'departments':
             depts = self.college_info.get('departments', [])
-            return self._format_list_response("📚 Departments", depts)
+            response = "📚 **Our Departments**\n\n"
+            for i, dept in enumerate(depts, 1):
+                response += f"{i}. {dept}\n"
+            response += "\n💡 *Ask about any department for more details!*"
+            return response
         
         elif intent_tag == 'facilities':
             facilities = self.college_info.get('facilities', [])
-            return self._format_list_response("🏫 Campus Facilities", facilities)
+            response = "🏫 **Campus Facilities**\n\n"
+            response += "✨ We offer the following facilities:\n\n"
+            for i, facility in enumerate(facilities, 1):
+                response += f"✓ {facility}\n"
+            response += "\n💡 *Ask about specific facilities for detailed information!*"
+            return response
         
         elif intent_tag == 'library':
             library = self.college_info.get('library', {})
-            return f"📚 Library Facilities:\n\n" \
-                   f"Timings: {library.get('timings', 'N/A')}\n" \
-                   f"Books: {library.get('books', 'N/A')}\n" \
-                   f"Digital Library: {library.get('digital', 'Available')}\n" \
-                   f"Reading Room: {library.get('reading_room', 'Available')}"
+            return f"📚 **Library Facilities**\n\n" \
+                   f"🕒 **Timings:** {library.get('timings', 'N/A')}\n" \
+                   f"📖 **Books Available:** {library.get('books', 'N/A')}\n" \
+                   f"💻 **Digital Library:** {library.get('digital', 'Available')}\n" \
+                   f"🪑 **Reading Room:** {library.get('reading_room', 'Available')}\n\n" \
+                   f"💡 *Perfect place for your studies!*"
         
         elif intent_tag == 'hostel':
             hostel = self.college_info.get('hostel', {})
-            return f"🏠 Hostel Facilities:\n\n" \
-                   f"Available: {hostel.get('available', 'Yes')}\n" \
-                   f"Boys Hostel: {hostel.get('boys', 'Available')}\n" \
-                   f"Girls Hostel: {hostel.get('girls', 'Available')}\n" \
-                   f"Fees: {hostel.get('fees', 'Contact hostel office')}\n" \
-                   f"Contact: {hostel.get('contact', 'N/A')}"
+            return f"🏠 **Hostel Facilities**\n\n" \
+                   f"✅ **Availability:** {hostel.get('available', 'Yes')}\n" \
+                   f"👦 **Boys Hostel:** {hostel.get('boys', 'Available')}\n" \
+                   f"👧 **Girls Hostel:** {hostel.get('girls', 'Available')}\n" \
+                   f"💰 **Fees:** {hostel.get('fees', 'Contact hostel office')}\n" \
+                   f"📞 **Contact:** {hostel.get('contact', 'N/A')}\n\n" \
+                   f"💡 *Safe and comfortable accommodation for students!*"
         
         elif intent_tag == 'transport':
             transport = self.college_info.get('transport', {})
-            return f"🚌 Transport Facilities:\n\n" \
-                   f"Bus Service: {transport.get('available', 'Available')}\n" \
-                   f"Routes: {transport.get('routes', 'Multiple routes available')}\n" \
-                   f"Timings: {transport.get('timings', 'Contact transport office')}\n" \
-                   f"Fees: {transport.get('fees', 'N/A')}"
+            return f"🚌 **Transport Facilities**\n\n" \
+                   f"✅ **Bus Service:** {transport.get('available', 'Available')}\n" \
+                   f"🗺️ **Routes:** {transport.get('routes', 'Multiple routes available')}\n" \
+                   f"🕒 **Timings:** {transport.get('timings', 'Contact transport office')}\n" \
+                   f"💰 **Fees:** {transport.get('fees', 'N/A')}\n\n" \
+                   f"💡 *Convenient transportation from various locations!*"
         
         elif intent_tag == 'contact':
             contact = self.college_info.get('contact', {})
             address = self.college_info.get('address', 'N/A')
-            return f"📞 Contact Information:\n\n" \
-                   f"Phone: {contact.get('phone', 'N/A')}\n" \
-                   f"Email: {contact.get('email', 'N/A')}\n" \
-                   f"Address: {address}\n" \
-                   f"Website: {self.college_info.get('website', 'N/A')}"
+            return f"📞 **Contact Information**\n\n" \
+                   f"📱 **Phone:** {contact.get('phone', 'N/A')}\n" \
+                   f"📧 **Email:** {contact.get('email', 'N/A')}\n" \
+                   f"📍 **Address:** {address}\n" \
+                   f"🌐 **Website:** {self.college_info.get('website', 'N/A')}\n\n" \
+                   f"💡 *Feel free to reach out anytime!*"
         
         elif intent_tag == 'courses':
             return self._handle_courses(entities)
         
         elif intent_tag == 'admission':
             admission = self.college_info.get('admission', {})
-            return f"🎓 Admissions Information:\n\n" \
-                   f"Status: {admission.get('status', 'Open')}\n" \
-                   f"Last Date: {admission.get('last_date', 'Check website')}\n" \
-                   f"Eligibility: {admission.get('eligibility', 'Check department wise')}\n" \
-                   f"📧 Contact: {admission.get('email', 'admissions@college.edu')}\n" \
-                   f"📞 Phone: {admission.get('phone', 'Contact admission office')}"
+            return f"🎓 **Admissions Information**\n\n" \
+                   f"✅ **Status:** {admission.get('status', 'Open')}\n" \
+                   f"📅 **Last Date:** {admission.get('last_date', 'Check website')}\n" \
+                   f"📋 **Eligibility:** {admission.get('eligibility', 'Check department wise')}\n" \
+                   f"📧 **Email:** {admission.get('email', 'admissions@college.edu')}\n" \
+                   f"📞 **Phone:** {admission.get('phone', 'Contact admission office')}\n\n" \
+                   f"💡 *Apply now to secure your future!*"
         
         elif intent_tag == 'fees':
             return self._handle_fees(entities)
         
         elif intent_tag == 'scholarship':
             scholarship = self.college_info.get('scholarship', {})
-            return f"💰 Scholarship Information:\n\n" \
-                   f"Merit Scholarship: {scholarship.get('merit', 'Available')}\n" \
-                   f"Financial Aid: {scholarship.get('financial_aid', 'Available for eligible students')}\n" \
-                   f"Government Schemes: {scholarship.get('government', 'Available')}\n" \
-                   f"Contact: {scholarship.get('contact', 'Scholarship cell')}"
+            return f"💰 **Scholarship Opportunities**\n\n" \
+                   f"🏆 **Merit Scholarship:** {scholarship.get('merit', 'Available')}\n" \
+                   f"🤝 **Financial Aid:** {scholarship.get('financial_aid', 'Available for eligible students')}\n" \
+                   f"🏛️ **Government Schemes:** {scholarship.get('government', 'Available')}\n" \
+                   f"📞 **Contact:** {scholarship.get('contact', 'Scholarship cell')}\n\n" \
+                   f"💡 *Don't let finances stop your dreams!*"
         
         elif intent_tag == 'placements':
             placements = self.college_info.get('placements', {})
-            return f"💼 Placement Statistics:\n\n" \
-                   f"Placement %: {placements.get('percentage', 'N/A')}\n" \
-                   f"Highest Package: {placements.get('highest', 'N/A')}\n" \
-                   f"Average Package: {placements.get('average', 'N/A')}\n" \
-                   f"Top Recruiters: {placements.get('companies', 'Multiple companies visit')}\n" \
-                   f"Contact: {placements.get('contact', 'Placement cell')}"
+            return f"💼 **Placement Statistics**\n\n" \
+                   f"📊 **Placement Rate:** {placements.get('percentage', 'N/A')}\n" \
+                   f"🎯 **Highest Package:** {placements.get('highest', 'N/A')}\n" \
+                   f"📈 **Average Package:** {placements.get('average', 'N/A')}\n" \
+                   f"🏢 **Top Recruiters:** {placements.get('companies', 'Multiple companies visit')}\n" \
+                   f"📞 **Contact:** {placements.get('contact', 'Placement cell')}\n\n" \
+                   f"💡 *Build your career with us!*"
         
         elif intent_tag == 'internship':
             internship = self.college_info.get('internship', {})
@@ -353,12 +376,22 @@ class Chatbot:
         elif intent_tag == 'sports':
             sports = self.college_info.get('sports', {})
             sports_list = sports.get('available', [])
-            return self._format_list_response("⚽ Sports Facilities", sports_list)
+            response = "⚽ **Sports Facilities**\n\n"
+            response += "🏆 Available Sports:\n\n"
+            for i, sport in enumerate(sports_list, 1):
+                response += f"{i}. {sport}\n"
+            response += "\n💡 *Stay fit and active with our sports facilities!*"
+            return response
         
         elif intent_tag == 'clubs':
             clubs = self.college_info.get('clubs', {})
             clubs_list = clubs.get('available', [])
-            return self._format_list_response("🎭 Student Clubs", clubs_list)
+            response = "🎭 **Student Clubs**\n\n"
+            response += "✨ Join our clubs:\n\n"
+            for i, club in enumerate(clubs_list, 1):
+                response += f"{i}. {club}\n"
+            response += "\n💡 *Explore your interests and make new friends!*"
+            return response
         
         elif intent_tag == 'exams':
             exams = self.college_info.get('exams', {})
@@ -485,9 +518,11 @@ class Chatbot:
         
         if sem and sem in dept_data.get('semesters', {}):
             subjects = dept_data['semesters'][sem]
-            response = f"📖 **{dept}**\n**Semester {sem} Subjects:**\n\n"
+            response = f"📖 **{dept}**\n\n"
+            response += f"📚 **Semester {sem} Subjects:**\n\n"
             for i, subj in enumerate(subjects, 1):
                 response += f"{i}. {subj}\n"
+            response += f"\n💡 *Total: {len(subjects)} subjects*"
             return response
         else:
             sems = ', '.join(dept_data.get('semesters', {}).keys())
