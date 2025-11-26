@@ -95,36 +95,71 @@ function sendQuickReply(text) {
 // Voice input (no TTS output)
 const voiceBtn = document.getElementById('voice');
 voiceBtn?.addEventListener('click', () => {
-    if (!('webkitSpeechRecognition' in window)) {
-        alert('Voice input not supported in this browser');
+    // Check for browser support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        alert('❌ Voice input not supported in this browser.\n\nPlease use Chrome, Edge, or Safari.');
         return;
     }
     
-    const recognition = new webkitSpeechRecognition();
-    recognition.lang = 'en-US';
-    recognition.interimResults = false;
-    
-    voiceBtn.style.background = '#ef4444';
-    voiceBtn.textContent = '⏺️';
-    
-    recognition.onresult = (e) => {
-        const transcript = e.results[0][0].transcript;
-        document.getElementById('user-input').value = transcript;
-        send();
-    };
-    
-    recognition.onend = () => {
+    try {
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        
+        voiceBtn.style.background = '#ef4444';
+        voiceBtn.textContent = '⏺️';
+        voiceBtn.disabled = true;
+        
+        recognition.onstart = () => {
+            console.log('Voice recognition started');
+        };
+        
+        recognition.onresult = (e) => {
+            const transcript = e.results[0][0].transcript;
+            document.getElementById('user-input').value = transcript;
+            voiceBtn.style.background = '';
+            voiceBtn.textContent = '🎤';
+            voiceBtn.disabled = false;
+            send();
+        };
+        
+        recognition.onend = () => {
+            voiceBtn.style.background = '';
+            voiceBtn.textContent = '🎤';
+            voiceBtn.disabled = false;
+        };
+        
+        recognition.onerror = (e) => {
+            voiceBtn.style.background = '';
+            voiceBtn.textContent = '🎤';
+            voiceBtn.disabled = false;
+            
+            let errorMsg = 'Voice input failed';
+            if (e.error === 'not-allowed') {
+                errorMsg = '❌ Microphone access denied.\n\nPlease allow microphone permission in browser settings.';
+            } else if (e.error === 'no-speech') {
+                errorMsg = '🔇 No speech detected. Please try again.';
+            } else if (e.error === 'network') {
+                errorMsg = '🌐 Network error. Check your internet connection.';
+            } else if (e.error === 'aborted') {
+                errorMsg = 'Voice input cancelled.';
+            }
+            
+            console.error('Speech recognition error:', e.error);
+            alert(errorMsg);
+        };
+        
+        recognition.start();
+    } catch (err) {
         voiceBtn.style.background = '';
         voiceBtn.textContent = '🎤';
-    };
-    
-    recognition.onerror = () => {
-        voiceBtn.style.background = '';
-        voiceBtn.textContent = '🎤';
-        alert('Voice input failed');
-    };
-    
-    recognition.start();
+        voiceBtn.disabled = false;
+        console.error('Voice recognition error:', err);
+        alert('❌ Voice input initialization failed. Please try again.');
+    }
 });
 
 // Send button
