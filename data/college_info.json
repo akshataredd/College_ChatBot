@@ -120,5 +120,12 @@
     "network": "Active alumni network of 10,000+ members",
     "portal": "alumni.examplecollege.edu",
     "contact": "alumni@examplecollege.edu"
+  },
+  "auditorium": {
+    "available": "Yes",
+    "capacity": "500 seats",
+    "features": "AC hall with modern audio-visual equipment, stage lighting, and sound system",
+    "events": "Used for seminars, workshops, cultural programs, and guest lectures",
+    "booking": "Available for college events and departmental functions"
   }
 }

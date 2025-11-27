@@ -115,8 +115,16 @@ class Chatbot:
         
         # Check if user is asking about a specific department/course or semester
         dept_keywords = ['cse', 'computer science', 'cs', 'ece', 'electronics', 'mechanical', 
-                        'mech', 'civil', 'eee', 'electrical', 'it', 'information technology',
+                        'mech', 'civil', 'eee', 'electrical', 'information technology',
                         'mca', 'mba', 'master', 'b.tech', 'btech', 'engineering']
+        
+        # Check for IT as a separate word to avoid matching it inside other words
+        is_dept_query = any(keyword in text_lower for keyword in dept_keywords)
+        if not is_dept_query:
+            # Check for IT as a whole word only
+            import re as re_module
+            if re_module.search(r'\bit\b', text_lower):
+                is_dept_query = True
         
         sem_keywords = ['semester', 'sem', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th',
                        'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth']
@@ -158,7 +166,8 @@ class Chatbot:
             'attendance': 'attendance present absent leave percentage minimum attendance required attendance policy',
             'canteen': 'canteen cafeteria food mess lunch breakfast snack canteen facility food available',
             'labs': 'lab laboratory workshop practical equipment computer lab facility laboratory equipment',
-            'alumni': 'alumni graduate past student network association alumni network'
+            'alumni': 'alumni graduate past student network association alumni network',
+            'auditorium': 'auditorium seminar hall conference event hall assembly hall auditorium facility auditorium capacity booking'
         }
         
         # If it's a department/semester query, force it to 'courses' intent
@@ -179,7 +188,8 @@ class Chatbot:
                 'sports': ['sports', 'sport', 'gym', 'playground'],
                 'facilities': ['facilities', 'infrastructure', 'campus'],
                 'admission': ['admission', 'admissions', 'how to apply'],
-                'contact': ['contact', 'phone', 'email', 'address']
+                'contact': ['contact', 'phone', 'email', 'address'],
+                'auditorium': ['auditorium', 'seminar hall', 'assembly hall']
             }
             
             intent_tag = None
@@ -422,10 +432,21 @@ class Chatbot:
         
         elif intent_tag == 'alumni':
             alumni = self.college_info.get('alumni', {})
-            return f"👥 Alumni Network:\n\n" \
-                   f"Network: {alumni.get('network', 'Active alumni association')}\n" \
-                   f"Portal: {alumni.get('portal', 'Available')}\n" \
-                   f"Contact: {alumni.get('contact', 'alumni@college.edu')}"
+            return f"👥 **Alumni Network**\n\n" \
+                   f"📊 **Network:** {alumni.get('network', 'Active alumni association')}\n" \
+                   f"🌐 **Portal:** {alumni.get('portal', 'Available')}\n" \
+                   f"📧 **Contact:** {alumni.get('contact', 'alumni@college.edu')}\n\n" \
+                   f"💡 *Stay connected with our alumni community!*"
+        
+        elif intent_tag == 'auditorium':
+            auditorium = self.college_info.get('auditorium', {})
+            return f"🎭 **Auditorium Facility**\n\n" \
+                   f"✅ **Available:** {auditorium.get('available', 'Yes')}\n" \
+                   f"👥 **Capacity:** {auditorium.get('capacity', 'N/A')}\n" \
+                   f"🎬 **Features:** {auditorium.get('features', 'Modern facilities')}\n" \
+                   f"🎪 **Events:** {auditorium.get('events', 'Various events hosted')}\n" \
+                   f"📅 **Booking:** {auditorium.get('booking', 'Contact administration')}\n\n" \
+                   f"💡 *Perfect venue for seminars, workshops, and cultural events!*"
         
         else:
             return self._fallback_response()

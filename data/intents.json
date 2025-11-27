@@ -257,6 +257,15 @@
       "responses": []
     },
     {
+      "tag": "auditorium",
+      "patterns": [
+        "Auditorium", "Auditorium facility", "Seminar hall", "Does college have auditorium",
+        "Auditorium capacity", "Auditorium booking", "Event hall", "Conference hall",
+        "Where are events held", "Auditorium seating", "Assembly hall"
+      ],
+      "responses": []
+    },
+    {
       "tag": "help",
       "patterns": [
         "Help", "I need help", "Can you help me", "What can you do",
